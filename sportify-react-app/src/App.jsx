@@ -8,6 +8,7 @@ import Login from './components/Login';
 import UserDashboard from './components/dashboards/UserDashboard';
 import AdminDashboard from './components/dashboards/AdminDashboard';
 import CoachDashboard from './components/dashboards/CoachDashboard';
+import ParallaxBackground from './components/ParallaxBackground';
 
 const PrivateRoute = ({ children, requiredRole }) => {
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -26,37 +27,40 @@ const PrivateRoute = ({ children, requiredRole }) => {
 
 const App = () => (
   <Router>
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-black via-gray-900 to-black font-sans">
-      <Navbar />
-      <main className="flex-grow">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route 
-            path="/create-event" 
-            element={
-              <PrivateRoute requiredRole="admin">
-                <CreateEventForm />
-              </PrivateRoute>
-            } 
-          />
-          <Route 
-            path="/dashboard" 
-            element={
-              <PrivateRoute>
-                {localStorage.getItem('userRole') === 'admin' ? (
-                  <AdminDashboard />
-                ) : localStorage.getItem('userRole') === 'coach' ? (
-                  <CoachDashboard />
-                ) : (
-                  <UserDashboard />
-                )}
-              </PrivateRoute>
-            } 
-          />
-        </Routes>
-      </main>
-      <Footer />
+    <div className="min-h-screen w-full flex flex-col font-sans relative">
+      <ParallaxBackground />
+      <div className="relative z-10 w-full">
+        <Navbar />
+        <main className="flex-grow w-full">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route 
+              path="/create-event" 
+              element={
+                <PrivateRoute requiredRole="admin">
+                  <CreateEventForm />
+                </PrivateRoute>
+              } 
+            />
+            <Route 
+              path="/dashboard" 
+              element={
+                <PrivateRoute>
+                  {localStorage.getItem('userRole') === 'admin' ? (
+                    <AdminDashboard />
+                  ) : localStorage.getItem('userRole') === 'coach' ? (
+                    <CoachDashboard />
+                  ) : (
+                    <UserDashboard />
+                  )}
+                </PrivateRoute>
+              } 
+            />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
     </div>
   </Router>
 );
