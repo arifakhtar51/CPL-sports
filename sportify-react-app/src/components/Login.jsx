@@ -6,10 +6,12 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
+  const [selectedRole, setSelectedRole] = useState('player');
   const [registerData, setRegisterData] = useState({
     name: '',
     email: '',
-    studentId: '',
+    id: '',
+    role: 'player',
     password: '',
     confirmPassword: ''
   });
@@ -24,6 +26,14 @@ const Login = () => {
       localStorage.setItem('userRole', 'admin');
       localStorage.setItem('isLoggedIn', 'true');
       navigate('/create-event');
+    } else if (username === 'coach' && password === 'coach') {
+      localStorage.setItem('userRole', 'coach');
+      localStorage.setItem('isLoggedIn', 'true');
+      navigate('/');
+    } else if (username === 'player' && password === 'player') {
+      localStorage.setItem('userRole', 'player');
+      localStorage.setItem('isLoggedIn', 'true');
+      navigate('/');
     } else {
       setError('Invalid credentials');
     }
@@ -39,9 +49,9 @@ const Login = () => {
     }
 
     // Demo registration logic
-    localStorage.setItem('userRole', 'student');
+    localStorage.setItem('userRole', registerData.role);
     localStorage.setItem('isLoggedIn', 'true');
-    localStorage.setItem('studentData', JSON.stringify(registerData));
+    localStorage.setItem('userData', JSON.stringify(registerData));
     navigate('/');
   };
 
@@ -50,7 +60,7 @@ const Login = () => {
       <div className="max-w-md w-full space-y-8 bg-black/40 backdrop-blur-md p-8 rounded-2xl border border-white/10 shadow-xl">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text">
-            {isRegistering ? 'Student Registration' : 'Login to CPL Sports T11'}
+            {isRegistering ? 'Register to CPL Sports T11' : 'Login to CPL Sports T11'}
           </h2>
         </div>
 
@@ -104,7 +114,7 @@ const Login = () => {
                 onClick={() => setIsRegistering(true)}
                 className="text-cyan-400 hover:text-cyan-300"
               >
-                New student? Register here
+                New user? Register here
               </button>
             </div>
           </form>
@@ -136,10 +146,40 @@ const Login = () => {
                   type="text"
                   required
                   className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-cyan-400/30 bg-black/40 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-                  placeholder="Student ID"
-                  value={registerData.studentId}
-                  onChange={(e) => setRegisterData({...registerData, studentId: e.target.value})}
+                  placeholder={selectedRole === 'player' ? 'Player ID' : 'Coach ID'}
+                  value={registerData.id}
+                  onChange={(e) => setRegisterData({...registerData, id: e.target.value})}
                 />
+              </div>
+              <div className="flex space-x-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedRole('player');
+                    setRegisterData({...registerData, role: 'player'});
+                  }}
+                  className={`flex-1 px-4 py-2 rounded-lg border ${
+                    selectedRole === 'player'
+                      ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300'
+                      : 'border-cyan-400/30 text-cyan-400 hover:bg-cyan-500/10'
+                  }`}
+                >
+                  Player
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedRole('coach');
+                    setRegisterData({...registerData, role: 'coach'});
+                  }}
+                  className={`flex-1 px-4 py-2 rounded-lg border ${
+                    selectedRole === 'coach'
+                      ? 'bg-blue-500/20 border-blue-400 text-blue-300'
+                      : 'border-blue-400/30 text-blue-400 hover:bg-blue-500/10'
+                  }`}
+                >
+                  Coach
+                </button>
               </div>
               <div>
                 <input

@@ -10,7 +10,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('userRole');
-    localStorage.removeItem('studentData');
+    localStorage.removeItem('userData');
     navigate('/login');
   };
 
@@ -29,6 +29,11 @@ const Navbar = () => {
                 <Link to="/" className="px-4 py-2 text-cyan-300 hover:text-cyan-200 rounded-full transition-colors font-medium">
                   Home
                 </Link>
+                {isLoggedIn && (
+                  <Link to="/dashboard" className="px-4 py-2 text-blue-300 hover:text-blue-200 rounded-full transition-colors font-medium">
+                    Dashboard
+                  </Link>
+                )}
                 {isLoggedIn && userRole === 'admin' && (
                   <Link 
                     to="/create-event" 
@@ -81,6 +86,15 @@ const Navbar = () => {
                 >
                   Home
                 </Link>
+                {isLoggedIn && (
+                  <Link 
+                    to="/dashboard" 
+                    className="px-4 py-2 text-blue-300 hover:bg-blue-500/10 rounded-full transition-colors font-medium"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                )}
                 {isLoggedIn && userRole === 'admin' && (
                   <Link 
                     to="/create-event" 

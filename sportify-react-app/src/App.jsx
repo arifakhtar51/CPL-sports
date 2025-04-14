@@ -5,6 +5,9 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import CreateEventForm from './components/CreateEventForm';
 import Login from './components/Login';
+import UserDashboard from './components/dashboards/UserDashboard';
+import AdminDashboard from './components/dashboards/AdminDashboard';
+import CoachDashboard from './components/dashboards/CoachDashboard';
 
 const PrivateRoute = ({ children, requiredRole }) => {
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -34,6 +37,20 @@ const App = () => (
             element={
               <PrivateRoute requiredRole="admin">
                 <CreateEventForm />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/dashboard" 
+            element={
+              <PrivateRoute>
+                {localStorage.getItem('userRole') === 'admin' ? (
+                  <AdminDashboard />
+                ) : localStorage.getItem('userRole') === 'coach' ? (
+                  <CoachDashboard />
+                ) : (
+                  <UserDashboard />
+                )}
               </PrivateRoute>
             } 
           />
